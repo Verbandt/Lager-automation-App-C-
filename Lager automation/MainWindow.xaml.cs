@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using Lager_automation.Models;
+using Lager_automation.Views;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -8,7 +10,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Lager_automation.Models;
 
 namespace Lager_automation
 {
@@ -20,23 +21,15 @@ namespace Lager_automation
         public MainWindow()
         {
             InitializeComponent();
+            // Start with the main menu
+            MainContent.Content = new MainMenuView(this);
         }
 
-        private void RunButton_Click(object sender, RoutedEventArgs e)
+        public void ShowMainMenu()
         {
-            RunButton.IsEnabled = false;
-            RunButton.Content = "Running...";
-
-            try
-            {
-                var manager = new Manager();
-                manager.BeginRackingProcess();
-
-            }
-            finally
-            {
-                Application.Current.Shutdown();
-            }
+            MainContent.Content = new MainMenuView(this);
         }
+
+        
     }
 }

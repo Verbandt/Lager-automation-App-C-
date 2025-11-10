@@ -21,16 +21,13 @@ namespace Lager_automation.Models
         public int RackLength { get; private set; }
         public int RackWidth { get; private set; }
         public int ShelfInnerLength { get; private set; }
-
         private Dictionary<string, int> ShelfHeights = new()
         {
             { "L1-L3", 766 },
             { "L4", 966 },
         };
-
         private int SpaceAboveEmb { get; set; } = 150;
         private int SpaceInbetweenEmb { get; set; } = 60;
-
         private Dictionary<string, int> FactoryHeightLimits = new()
         {
             { "VS", 7000 },
@@ -42,9 +39,7 @@ namespace Lager_automation.Models
         private int HeightLimit { get; set; }
         public int CurrentHeight { get; private set; } = 0;
         public int Weight { get; set; } = 0;
-
         private bool OnFloor { get; set; } = true;
-
         private Shelf? CurrentShelf { get; set; }
 
         public List<Emb> EmbAssigned = new();

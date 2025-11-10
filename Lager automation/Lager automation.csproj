@@ -10,6 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="johannes img.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <COMReference Include="BricscadApp">
       <WrapperTool>tlbimp</WrapperTool>
       <VersionMinor>0</VersionMinor>
@@ -42,6 +46,10 @@
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.105.0" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="9.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="johannes img.png" />
   </ItemGroup>
 
 </Project>

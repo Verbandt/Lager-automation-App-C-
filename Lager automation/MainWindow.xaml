@@ -5,18 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lager_automation"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    
+        Title="MainWindow" Height="800" Width="1600">
+
     <Grid Background="#1E1E1E">
-        <Button x:Name="RunButton"
-                Content="Run Lager Automation"
-                Width="200"
-                Height="50"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                FontSize="16"
-                Background="#2D89EF"
-                Foreground="White"
-                Click="RunButton_Click"/>
+        <ContentControl x:Name="MainContent"/>
     </Grid>
 </Window>
