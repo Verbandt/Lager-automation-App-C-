@@ -1,0 +1,109 @@
+﻿<UserControl x:Class="Lager_automation.Controls.FilterControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="clr-namespace:Lager_automation.Controls"
+             xmlns:models="clr-namespace:Lager_automation.Models"
+             xmlns:viewmodels="clr-namespace:Lager_automation.ViewModels"
+             xmlns:converters="clr-namespace:Lager_automation.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <ObjectDataProvider x:Key="CriteriaValues" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="models:FilterCriteria"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <converters:EnumToSwedishConverter x:Key="EnumToSwedish"/>
+
+        <!-- use the declared prefix 'converters' (was 'controls' which is undeclared) -->
+        <converters:CriteriaHelpConverter x:Key="CriteriaHelpConverter"/>
+
+        <DataTemplate x:Key="FactoryTemplate">
+            <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+                     FontSize="20"
+                     Padding="2"
+                     TextOptions.TextFormattingMode="Display"
+                     ToolTipService.InitialShowDelay="200"
+                     ToolTipService.ShowDuration="15000">
+                <TextBox.ToolTip>
+                    <MultiBinding Converter="{StaticResource CriteriaHelpConverter}">
+                        <!-- DataContext here is the Filter object -->
+                        <Binding Path="SelectedCriteria"/>
+                        <Binding Path="InputValue"/>
+                    </MultiBinding>
+                </TextBox.ToolTip>
+            </TextBox>
+        </DataTemplate>
+
+        <DataTemplate x:Key="CustomerTemplate">
+            <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="20"
+                     ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="15000">
+                <TextBox.ToolTip>
+                    <MultiBinding Converter="{StaticResource CriteriaHelpConverter}">
+                        <Binding Path="SelectedCriteria"/>
+                        <Binding Path="InputValue"/>
+                    </MultiBinding>
+                </TextBox.ToolTip>
+            </TextBox>
+        </DataTemplate>
+
+        <DataTemplate x:Key="StackingHeightTemplate">
+            <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="20"
+                     ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="15000">
+                <TextBox.ToolTip>
+                    <MultiBinding Converter="{StaticResource CriteriaHelpConverter}">
+                        <Binding Path="SelectedCriteria"/>
+                        <Binding Path="InputValue"/>
+                    </MultiBinding>
+                </TextBox.ToolTip>
+            </TextBox>
+        </DataTemplate>
+
+        <models:CriteriaTemplateSelector x:Key="CriteriaSelector"
+    FactoryTemplate="{StaticResource FactoryTemplate}"
+    CustomerTemplate="{StaticResource CustomerTemplate}"
+    StackingHeightTemplate="{StaticResource StackingHeightTemplate}" />
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Checkbox -->
+            <CheckBox x:Name="UseFilterCheckBox" Grid.Row="0" Content="{Binding Title, RelativeSource={RelativeSource AncestorType=UserControl}}" HorizontalAlignment="Center"
+                 IsChecked="{Binding Filter.UseFilter, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" Foreground="White">
+                <CheckBox.LayoutTransform>
+                    <ScaleTransform ScaleX="2.2" ScaleY="2.2"/>
+                </CheckBox.LayoutTransform>
+            </CheckBox>
+
+            <!-- Criteria ComboBox (uses converter to show Swedish names) -->
+        <ComboBox Grid.Row="1" Margin="0,20,0,0" MaxWidth="300"
+                  ItemsSource="{Binding Source={StaticResource CriteriaValues}}"
+                  SelectedItem="{Binding Filter.SelectedCriteria, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                  Visibility="{Binding IsChecked, ElementName=UseFilterCheckBox, Converter={StaticResource BoolToVis}}"
+                  Background="#303030"
+                  Height="35"
+                  FontSize="18">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Converter={StaticResource EnumToSwedish}}" FontSize="18"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <!-- Dynamic Input Field -->
+        <ContentControl Grid.Row="2" Margin="0,20,0,0" Width="150" FontSize="18" HorizontalAlignment="Center" Content="{Binding Filter, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                        ContentTemplateSelector="{StaticResource CriteriaSelector}"
+                        Visibility="{Binding IsChecked, ElementName=UseFilterCheckBox, Converter={StaticResource BoolToVis}}"/>
+
+    </Grid>
+</UserControl>

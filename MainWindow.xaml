@@ -1,0 +1,9 @@
+<!-- reduce the large top margin and pin the control to the top so its header appears at the visible top -->
+<controls:ItemListControl x:Name="RackListControl"
+                          Grid.Row="1"
+                          MaxWidth="500"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Top"
+                          Margin="0,10,0,10"
+                          Title="Ställage"
+                          AddClicked="AddRackButton_Click"/>

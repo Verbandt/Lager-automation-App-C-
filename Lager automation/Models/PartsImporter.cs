@@ -44,8 +44,9 @@ namespace Lager_automation.Models
                 double price = row.Cell(headers["Pris/ SEK"]).GetDouble();
                 string belongsTo = row.Cell(headers["Racks del"]).GetString();
                 int quantity = row.Cell(headers["Antal"]).GetValue<int>();
+                string category = row.Cell(headers["Kategori"]).GetString();
 
-                var part = new Part(codeName, partName, belongsTo, price, quantity);
+                var part = new Part(codeName, partName, belongsTo, price, quantity, category);
                 parts[codeName] = part;
             }
             return parts;

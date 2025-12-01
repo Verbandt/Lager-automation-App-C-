@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Lager_automation.Models
 {
-    public class Part(string codeName, string partName, string belongsTo, double price, int quantity)
+    public class Part(string codeName, string partName, string belongsTo, double price, int quantity, string category)
     {
+        public string Category { get; set; } = category;
         public string CodeName { get; set; } = codeName;
         public string PartName { get; set; } = partName;
         public string BelongsTo { get; set; } = belongsTo;

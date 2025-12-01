@@ -10,8 +10,6 @@ namespace Lager_automation.Models
     {
         public static Dictionary<string, Part> Parts { get; set; } = PartsImporter.ImportParts("C:\\Users\\KMOLLER2\\OneDrive - Volvo Cars\\Desktop\\Johannes hatar HF\\Lager automation\\Stallage lista.xlsx");
 
-
-
         public static void AddShelfLevel(bool backCover, string typeOfBeam, int beamLength)
         {
             int deckingReduction = beamLength switch
