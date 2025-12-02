@@ -10,7 +10,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\Instructions\racks\racks_step1.png" />
+    <None Remove="Images\Instructions\racks\racks_step2.png" />
     <None Remove="johannes img.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\Instructions\racks\racks_step1.png" />
+    <Resource Include="Images\Instructions\racks\racks_step2.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,11 +52,16 @@
 
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.105.0" />
+    <PackageReference Include="IronXL.Excel" Version="2025.11.2" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="9.0.10" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="johannes img.png" />
+    <Resource Include="Images\johannes img.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Images\Instructions\floor\" />
   </ItemGroup>
 
 </Project>

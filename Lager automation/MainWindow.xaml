@@ -38,8 +38,10 @@
             <!-- Header -->
             <Label Grid.Row="0" Grid.Column="1" Content="Lager Automation" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="40"
                Foreground="White" Margin="0,6,0,0"/>
-            <Image Grid.Row="0" Grid.Column="2" Source="/johannes img.png" HorizontalAlignment="Right" VerticalAlignment="Top" Width="148" Height="148"
-                   Margin="0,0,-41,0"/>
+            <Button  Grid.Row="0" Grid.Column="2" x:Name="HelpBtn" HorizontalAlignment="Right" VerticalAlignment="Top" Width="148" Height="148" Margin="0,0,-41,0" Background="Transparent" BorderBrush="Transparent"
+                     BorderThickness="0" Click="HelpBtn_Click">
+                <Image Source="/Images/johannes img.png"/>
+            </Button>
 
             <!-- Rack side -->
             <controls:FilterControl Filter="{Binding RackFilter}" Title="Använd Ställage" Grid.Row="1" MaxHeight="350" VerticalAlignment="Top" Margin="0,100,0,0"/>

@@ -18,6 +18,8 @@ namespace Lager_automation
         public FilterViewModel RackFilter { get; } = new();
         public FilterViewModel FloorFilter { get; } = new();
 
+        public ExcelHandler ExcelHandler { get; set; } = new();
+
         private bool _isAdjustingAspect;
         private const double AspectRatio = 16.0 / 9.0;
 
@@ -31,7 +33,6 @@ namespace Lager_automation
             public int Right;
             public int Bottom;
         }
-
 
         public MainWindow()
         {
@@ -352,7 +353,13 @@ namespace Lager_automation
 
         private void ImportExcel_Click(object sender, RoutedEventArgs e)
         {
+            ExcelHandler.LoadExcelFile();
+        }
 
+        private void HelpBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var helpWindow = new HelpWindow { Owner = this };
+            helpWindow.Show();
         }
     }
 }

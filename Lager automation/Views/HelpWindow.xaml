@@ -1,0 +1,53 @@
+﻿<Window x:Class="Lager_automation.Views.HelpWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Lager_automation.Views"
+        mc:Ignorable="d"
+        Title="Instruktioner" Height="720" Width="1280"
+        Background="Black">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Top -->
+        <Border Grid.Row="0" Grid.ColumnSpan="3" Grid.Column="0" Background="#333131" BorderThickness="2" BorderBrush="White"/>
+        <Viewbox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Stretch="Uniform" StretchDirection="DownOnly">
+            <TextBlock Text="Instruktioner för användning av Lager Automation"  FontSize="24" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="10"/>
+        </Viewbox>
+       
+        <!-- Left side -->
+        <Border Grid.Row="1" Grid.Column="0" BorderBrush="White" BorderThickness="2" Padding="5" Background="#333131">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="10,0,10,0">
+                    <TextBlock Text="Välj vad du vill ha hjälp med" FontSize="16" Foreground="White" Margin="0,5,0,30"/>
+                    <Button x:Name="RackHelpButton" Content="1. Ställage" Width="150" Height="30" FontSize="12" Background="#2D89EF" Foreground="White" HorizontalAlignment="Center" Margin="0,10,0,0"
+                        Click="RackHelpButton_Click"/>
+                    <Button x:Name="FloorHelpButton" Content="2. Golvplats" Width="150" Height="30" FontSize="12" Background="#2D89EF" Foreground="White" HorizontalAlignment="Center" Margin="0,10,0,0"
+                        Click="FloorHelpButton_Click"/>
+                    <Button x:Name="ExcelHelpButton" Content="3. Indata (Excelfil)" Width="150" Height="30" FontSize="12" Background="#2D89EF" Foreground="White" HorizontalAlignment="Center" Margin="0,10,0,0"
+                        Click="ExcelHelpButton_Click"/>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+        
+        <!-- Right side -->
+        <Border Grid.Row="1" Grid.Column="2" BorderBrush="White" BorderThickness="2" Padding="5" Background="#333131">
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="HelpContentPanel" Margin="10">
+                    <!-- images will be added here dynamically -->
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+    </Grid>
+</Window>
