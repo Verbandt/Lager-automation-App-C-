@@ -6,19 +6,19 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="520">
     
-    <Border BorderBrush="White" BorderThickness="2" CornerRadius="4" MaxWidth="500"
+    <Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" CornerRadius="4" MaxWidth="500"
             HorizontalAlignment="Center" VerticalAlignment="Top" Padding="0">
-        <Grid x:Name="RootPanel" Background="#252525" Width="500" VerticalAlignment="Top">
+        <Grid x:Name="RootPanel" Background="{DynamicResource PanelBrush}" Width="500" VerticalAlignment="Top">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
             <!-- header row (height determined by content) -->
-            <Border Grid.Row="0" BorderBrush="White" BorderThickness="2" CornerRadius="4" Padding="5">
+            <Border Grid.Row="0" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" CornerRadius="4" Padding="5">
                 <DockPanel Margin="5">
                     <TextBlock Text="{Binding Title, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                               FontSize="23" Foreground="White" DockPanel.Dock="Left"/>
+                               FontSize="23" Foreground="{DynamicResource TextBrush}" DockPanel.Dock="Left"/>
                     <Button x:Name="AddButton" Content="+" Width="40" Height="40" FontSize="30"
                             DockPanel.Dock="Right" Background="#2D89EF" Padding="0,-2,0,0"
                             Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Center"

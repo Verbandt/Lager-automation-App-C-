@@ -28,7 +28,8 @@ namespace Lager_automation.Views
         {
             LoadHelpImages(
                 "Images/Instructions/racks/racks_step1.png",
-                "Images/Instructions/racks/racks_step2.png"
+                "Images/Instructions/racks/racks_step2.png",
+                "images/Instructions/racks/racks_step3.png"
             );
         }
 

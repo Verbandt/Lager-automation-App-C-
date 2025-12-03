@@ -4,6 +4,16 @@
              xmlns:local="clr-namespace:Lager_automation"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <ResourceDictionary>
+
+            <!-- Your global converters -->
+            <BooleanToVisibilityConverter x:Key="BoolToVis" />
+
+            <!-- Your merged dictionaries -->
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes/Dark.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

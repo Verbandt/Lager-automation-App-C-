@@ -65,9 +65,9 @@
         </DataTemplate>
 
         <models:CriteriaTemplateSelector x:Key="CriteriaSelector"
-    FactoryTemplate="{StaticResource FactoryTemplate}"
-    CustomerTemplate="{StaticResource CustomerTemplate}"
-    StackingHeightTemplate="{StaticResource StackingHeightTemplate}" />
+            FactoryTemplate="{StaticResource FactoryTemplate}"
+            CustomerTemplate="{StaticResource CustomerTemplate}"
+            StackingHeightTemplate="{StaticResource StackingHeightTemplate}" />
     </UserControl.Resources>
     
     <Grid>
@@ -79,7 +79,7 @@
 
         <!-- Checkbox -->
             <CheckBox x:Name="UseFilterCheckBox" Grid.Row="0" Content="{Binding Title, RelativeSource={RelativeSource AncestorType=UserControl}}" HorizontalAlignment="Center"
-                 IsChecked="{Binding Filter.UseFilter, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" Foreground="White">
+                 IsChecked="{Binding Filter.UseFilter, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" Foreground="{DynamicResource TextBrush}">
                 <CheckBox.LayoutTransform>
                     <ScaleTransform ScaleX="2.2" ScaleY="2.2"/>
                 </CheckBox.LayoutTransform>
@@ -90,7 +90,7 @@
                   ItemsSource="{Binding Source={StaticResource CriteriaValues}}"
                   SelectedItem="{Binding Filter.SelectedCriteria, RelativeSource={RelativeSource AncestorType=UserControl}}"
                   Visibility="{Binding IsChecked, ElementName=UseFilterCheckBox, Converter={StaticResource BoolToVis}}"
-                  Background="#303030"
+                  Background="{DynamicResource PanelBrush}"
                   Height="35"
                   FontSize="18">
             <ComboBox.ItemTemplate>
@@ -101,7 +101,9 @@
         </ComboBox>
 
         <!-- Dynamic Input Field -->
-        <ContentControl Grid.Row="2" Margin="0,20,0,0" Width="150" FontSize="18" HorizontalAlignment="Center" Content="{Binding Filter, RelativeSource={RelativeSource AncestorType=UserControl}}"
+        <ContentControl Grid.Row="2" Margin="0,20,0,0" Width="150" FontSize="18" HorizontalAlignment="Center" Foreground="{DynamicResource TextBrush}"
+                        Background="{DynamicResource TextFieldBrush}"
+                        Content="{Binding Filter, RelativeSource={RelativeSource AncestorType=UserControl}}"
                         ContentTemplateSelector="{StaticResource CriteriaSelector}"
                         Visibility="{Binding IsChecked, ElementName=UseFilterCheckBox, Converter={StaticResource BoolToVis}}"/>
 

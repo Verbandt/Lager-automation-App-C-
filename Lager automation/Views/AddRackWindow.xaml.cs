@@ -16,9 +16,6 @@ using System.Windows.Shapes;
 
 namespace Lager_automation.Views
 {
-    /// <summary>
-    /// Interaction logic for AddRackWindow.xaml
-    /// </summary>
     public partial class AddRackWindow : Window
     {
         public string SectionName { get; set; } = string.Empty;
@@ -37,9 +34,9 @@ namespace Lager_automation.Views
 
             var orderedCategories = new List<string>
             {
-                "gavel",
-                "balk",
-                "genomskjutningsskydd"
+                "Gavel",
+                "Balk",
+                "Genomskjutningsskydd"
             };
 
             foreach (var category in orderedCategories)
@@ -47,7 +44,7 @@ namespace Lager_automation.Views
                 var label = new TextBlock
                 {
                     Text = category,
-                    Foreground = Brushes.White,
+                    Foreground = (Brush)Application.Current.Resources["TextBrush"],
                     FontSize = 14,
                     Margin = new Thickness(0, 10, 0, 5)
                 };
@@ -73,6 +70,8 @@ namespace Lager_automation.Views
                 combo.ItemsSource = parts;
                 combo.SelectedIndex = parts.Count > 0 ? 0 : -1;
 
+                label.Margin = new Thickness(62, 30, 0, 6);
+
                 PartSelectorPanel.Children.Add(label);
                 PartSelectorPanel.Children.Add(combo);
             }
@@ -80,9 +79,9 @@ namespace Lager_automation.Views
             var criteriaLabel = new TextBlock
             {
                 Text = "Kriterie:",
-                Foreground = Brushes.White,
+                Foreground = (Brush)Application.Current.Resources["TextBrush"],
                 FontSize = 14,
-                Margin = new Thickness(0, 20, 0, 5)
+                Margin = new Thickness(62, 30, 0, 6)
             };
 
             var criteriaCombo = new ComboBox

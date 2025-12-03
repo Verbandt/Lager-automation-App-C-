@@ -8,12 +8,12 @@
         xmlns:models="clr-namespace:Lager_automation.Models"
         xmlns:controls="clr-namespace:Lager_automation.Controls"
         WindowStartupLocation="CenterScreen"
-        Title="MainWindow" Width="1400" Height="788" Background="#1E1E1E"
+        Title="MainWindow" Width="1400" Height="788"  Background="{DynamicResource BackgroundBrush}"
         mc:Ignorable="d">
 
     <Viewbox Stretch="Uniform" StretchDirection="DownOnly">
         <!-- Give your grid a logical design resolution -->
-        <Grid Width="1400" Height="788" Background="#1E1E1E">
+        <Grid Width="1400" Height="788"  Background="{DynamicResource BackgroundBrush}">
 
             <!-- Define grid layout -->
             <Grid.RowDefinitions>
@@ -37,11 +37,13 @@
 
             <!-- Header -->
             <Label Grid.Row="0" Grid.Column="1" Content="Lager Automation" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="40"
-               Foreground="White" Margin="0,6,0,0"/>
-            <Button  Grid.Row="0" Grid.Column="2" x:Name="HelpBtn" HorizontalAlignment="Right" VerticalAlignment="Top" Width="148" Height="148" Margin="0,0,-41,0" Background="Transparent" BorderBrush="Transparent"
-                     BorderThickness="0" Click="HelpBtn_Click">
+               Foreground="{DynamicResource TextBrush}" Margin="0,6,0,0"/>
+            <Button  Grid.Row="0" Grid.Column="2" x:Name="HelpBtn" HorizontalAlignment="Right" VerticalAlignment="Top" Width="148" Height="148" Margin="0,0,-41,0" 
+                     Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Click="HelpBtn_Click">
                 <Image Source="/Images/johannes img.png"/>
             </Button>
+            <Button Grid.Row="0" Grid.Column="0" x:Name="ThemeButton" Content="🌙" Click="ToggleTheme_Click" Width="30" Height="30" FontSize="18" Background="Transparent" 
+                    Foreground="{DynamicResource TextBrush}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-25,6,0,0"/>
 
             <!-- Rack side -->
             <controls:FilterControl Filter="{Binding RackFilter}" Title="Använd Ställage" Grid.Row="1" MaxHeight="350" VerticalAlignment="Top" Margin="0,100,0,0"/>
@@ -49,10 +51,15 @@
                                       Title="Ställage" AddClicked="AddRackButton_Click" VerticalAlignment="Top"/>
 
             <!-- Center side -->
-            <Button Grid.Row="1" Grid.Column="1" x:Name="ImportExcel" Content="Importera Excelfil" Width="200" Height="50" FontSize="18" Background="#2D89EF"
-                Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,414,0,0" Click="ImportExcel_Click"/>
-            <TextBlock Grid.Row="1" Grid.Column="1" x:Name="SelectedExcelFileTxt"  FontSize="24" Background="White" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,469,0,0"
-                       Width="300"/>
+            <Border Grid.Row="1" Grid.Column="1" Height="150" Width="320" Margin="0,350,0,0" BorderThickness="2" BorderBrush="{DynamicResource BorderBrush}"
+                    Background="{DynamicResource PanelBrush}">
+                <StackPanel>
+                    <Button x:Name="ImportExcel" Content="Importera Excelfil" Width="200" Height="50" FontSize="18" Background="#2D89EF"
+                        Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0" Click="ImportExcel_Click"/>
+                    <TextBlock x:Name="SelectedExcelFileTxt"  FontSize="24" Background="{DynamicResource TextFieldBrush}"  HorizontalAlignment="Center" 
+                               VerticalAlignment="Top" Margin="0,10,0,0" Width="300"/>
+                </StackPanel>
+            </Border>
 
             <!-- Floor side -->
             <controls:FilterControl Filter="{Binding FloorFilter}" Title="Använd Golvplats" Grid.Row="1" Grid.Column="2" MaxHeight="350" VerticalAlignment="Top"

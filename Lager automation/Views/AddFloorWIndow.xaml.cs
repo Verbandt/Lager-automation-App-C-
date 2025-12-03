@@ -1,4 +1,5 @@
-﻿using Lager_automation.Models;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using Lager_automation.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,8 @@ namespace Lager_automation.Views
         public string FloorName { get; set; } = string.Empty;
         public List<string> SelectedProperties { get; private set; } = new();
 
+        private int _row = 0;
+
         public AddFloorWIndow()
         {
             InitializeComponent();
@@ -41,7 +44,7 @@ namespace Lager_automation.Views
             AddNumericFieldWithUnlock("Tonnage per m²:", 0, 10);
 
             // 4. Criteria (default Factory)
-            AddComboBox("Kriterier:", new List<string> { "Fabrik", "Kund", "EmbTyp" });
+            AddComboBox("Kriterier:", ["Fabrik", "Kund", "EmbTyp"]);
         }
 
         private void AddComboBox(string labelText, List<string> options)
@@ -49,16 +52,23 @@ namespace Lager_automation.Views
             var label = new TextBlock
             {
                 Text = labelText,
-                Foreground = Brushes.White,
+                Foreground = (Brush)Application.Current.Resources["TextBrush"],
                 FontSize = 14,
-                Margin = new Thickness(0, 10, 0, 5)
+                Margin = new Thickness(0,0,0,5),
+                HorizontalAlignment = HorizontalAlignment.Left
             };
+
+            Grid.SetRow(label, _row);
+            Grid.SetColumn(label, 0);
+            _row++;
+            FloorSelectorPanel.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
             var combo = new ComboBox
             {
-                Width = 400,
+                Width = 150,
                 FontSize = 14,
-                Margin = new Thickness(0, 0, 0, 5)
+                Margin = new Thickness(0,0,0,0),
+                HorizontalAlignment = HorizontalAlignment.Left
             };
 
             foreach (var o in options)
@@ -66,33 +76,60 @@ namespace Lager_automation.Views
 
             combo.SelectedIndex = 0;
 
+            Grid.SetRow(combo, _row);
+            Grid.SetColumn(combo, 0);
+            _row++;
+            FloorSelectorPanel.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+
+
+
             FloorSelectorPanel.Children.Add(label);
             FloorSelectorPanel.Children.Add(combo);
         }
 
         private void AddNumericField(string labelText, int min, int max)
         {
+            // Create label
             var label = new TextBlock
             {
                 Text = labelText,
-                Foreground = Brushes.White,
+                Foreground = (Brush)Application.Current.Resources["TextBrush"],
                 FontSize = 14,
-                Margin = new Thickness(0, 10, 0, 5)
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Margin = new Thickness(0, 0, 0, 5)
             };
+            Grid.SetRow(label, _row);
+            Grid.SetColumn(label, 0);
+            _row++;
+            FloorSelectorPanel.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
+            // Create numeric textbox
             var box = new TextBox
             {
-                Width = 400,
+                Width = 150,
                 FontSize = 14,
-                Margin = new Thickness(0, 0, 0, 5),
-                Tag = (min, max) // store allowed range in Tag
+                Tag = (min, max),
+                Background = (Brush)Application.Current.Resources["TextFieldBrush"],
+                Foreground = Brushes.Black,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Margin = new Thickness(0,0,0,20)
+           
             };
 
-            // Restrict to digits only (no letters, no decimals)
+            // Only allow digits
             box.PreviewTextInput += NumericTextBox_PreviewTextInput;
 
+            Grid.SetRow(box, _row);
+            Grid.SetColumn(box, 0);
+            _row++;
+            FloorSelectorPanel.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+
+            // Add both elements
             FloorSelectorPanel.Children.Add(label);
             FloorSelectorPanel.Children.Add(box);
+
+            
         }
 
         private void AddNumericFieldWithUnlock(string labelText, int min, int max)
@@ -101,42 +138,50 @@ namespace Lager_automation.Views
             var label = new TextBlock
             {
                 Text = labelText,
-                Foreground = Brushes.White,
+                Foreground = (Brush)Application.Current.Resources["TextBrush"],
                 FontSize = 14,
-                Margin = new Thickness(0, 10, 0, 5)
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Margin = new Thickness(0,0,0,5)
             };
 
-            // Container
-            var panel = new DockPanel { Margin = new Thickness(0, 0, 0, 5) };
+            Grid.SetRow(label, _row);
+            Grid.SetColumn(label, 0);
+            _row++;
+            FloorSelectorPanel.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
-            // Numeric field (locked by default)
+            // Container for textbox + button
+            var panel = new DockPanel();
+
+            // Numeric field (locked)
             var box = new TextBox
             {
-                Width = 350,
+                Width = 150,
                 FontSize = 14,
-                IsReadOnly = true,                          // locked initially
-                Background = new SolidColorBrush(Color.FromRgb(60, 60, 60)),  // gray background
-                Foreground = Brushes.LightGray,             // gray text color
+                IsReadOnly = true,
+                Background = Brushes.Gray,
                 Tag = (min, max),
-                Text = ""                                   // no default number!
+                Text = "",
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Margin = new Thickness(0, 0, 0, 20)
             };
 
-            // Allow digits only when unlocked
+            // Number restriction
             box.PreviewTextInput += (s, e) =>
             {
-                if (!box.IsReadOnly)
-                    e.Handled = !e.Text.All(char.IsDigit);
+                if (box.IsReadOnly)
+                    e.Handled = true;
                 else
-                    e.Handled = true; // never allow typing when locked
+                    e.Handled = !e.Text.All(char.IsDigit);
             };
 
-            // Unlock button
+            // Lock/unlock button
             var unlockButton = new Button
             {
-                Content = "🔒",        // locked state
+                Content = "🔒",
                 Width = 35,
                 Height = 24,
-                Margin = new Thickness(5, 0, 0, 0)
+                Margin = new Thickness(0, 0, 0, 20)
             };
 
             unlockButton.Click += (s, e) =>
@@ -145,30 +190,28 @@ namespace Lager_automation.Views
 
                 if (box.IsReadOnly)
                 {
-                    // 🔒 Locked state
                     unlockButton.Content = "🔒";
-                    box.Background = new SolidColorBrush(Color.FromRgb(60, 60, 60));
-                    box.Foreground = Brushes.LightGray;
-
-                    // Clear any user-entered value
+                    box.Background = Brushes.Gray;
                     box.Text = "";
                 }
                 else
                 {
-                    // 🔓 Unlocked state
                     unlockButton.Content = "🔓";
-                    box.Background = new SolidColorBrush(Color.FromRgb(30, 30, 30));
-                    box.Foreground = Brushes.White;
-
-                    // Focus field for typing
+                    box.Background = (Brush)Application.Current.Resources["TextFieldBrush"];
+                    box.Foreground = Brushes.Black;
                     box.Focus();
                 }
             };
 
             DockPanel.SetDock(unlockButton, Dock.Right);
-
             panel.Children.Add(unlockButton);
             panel.Children.Add(box);
+
+            // Add to grid
+            Grid.SetRow(panel, _row);
+            Grid.SetColumn(panel, 0);
+            _row++;
+            FloorSelectorPanel.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
             FloorSelectorPanel.Children.Add(label);
             FloorSelectorPanel.Children.Add(panel);
@@ -293,21 +336,21 @@ namespace Lager_automation.Views
 
             if (floor.WeightLimitTonageM2 == 0)
             {
+
                 // Locked state
                 tonnageBox.IsReadOnly = true;
                 tonnageBox.Text = "";
-                unlockButton.Content = "🔓";
-                tonnageBox.Background = new SolidColorBrush(Color.FromRgb(60, 60, 60));
-                tonnageBox.Foreground = Brushes.LightGray;
+                unlockButton.Content = "🔒";
+                tonnageBox.Background = Brushes.Gray;
             }
             else
             {
                 // Unlocked state
                 tonnageBox.IsReadOnly = false;
                 tonnageBox.Text = floor.WeightLimitTonageM2.ToString();
-                unlockButton.Content = "🔒";
-                tonnageBox.Background = new SolidColorBrush(Color.FromRgb(30, 30, 30));
-                tonnageBox.Foreground = Brushes.White;
+                unlockButton.Content = "🔓";
+                tonnageBox.Background = (Brush)Application.Current.Resources["TextFieldBrush"];
+                tonnageBox.Foreground = Brushes.Black;
             }
 
 

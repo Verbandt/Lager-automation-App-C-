@@ -25,6 +25,8 @@ namespace Lager_automation
 
         private const int WM_SIZING = 0x0214;
 
+        private bool _isDarkMode = true;
+
         [StructLayout(LayoutKind.Sequential)]
         private struct RECT
         {
@@ -360,6 +362,20 @@ namespace Lager_automation
         {
             var helpWindow = new HelpWindow { Owner = this };
             helpWindow.Show();
+        }
+
+        private void ToggleTheme_Click(object sender, RoutedEventArgs e)
+        {
+            string newTheme = _isDarkMode ? "Themes/Light.xaml" : "Themes/Dark.xaml";
+            _isDarkMode = !_isDarkMode;
+
+            ThemeButton.Content = _isDarkMode ? "🌙  Byt Tema" : "☀️  Byt Tema";
+
+            var dict = new ResourceDictionary { Source = new Uri(newTheme, UriKind.Relative) };
+            
+
+            Application.Current.Resources.MergedDictionaries.Clear();
+            Application.Current.Resources.MergedDictionaries.Add(dict);
         }
     }
 }

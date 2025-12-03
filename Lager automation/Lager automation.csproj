@@ -12,6 +12,7 @@
   <ItemGroup>
     <None Remove="Images\Instructions\racks\racks_step1.png" />
     <None Remove="Images\Instructions\racks\racks_step2.png" />
+    <None Remove="Images\Instructions\racks\racks_step3.png" />
     <None Remove="johannes img.png" />
   </ItemGroup>
 
@@ -57,6 +58,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\Instructions\racks\racks_step3.png" />
     <Resource Include="Images\johannes img.png" />
   </ItemGroup>
 

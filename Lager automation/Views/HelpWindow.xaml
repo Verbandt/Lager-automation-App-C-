@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Lager_automation.Views"
         mc:Ignorable="d"
         Title="Instruktioner" Height="720" Width="1280"
-        Background="Black">
+        Background="{DynamicResource BackgroundBrush}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -19,16 +19,17 @@
         </Grid.ColumnDefinitions>
 
         <!-- Top -->
-        <Border Grid.Row="0" Grid.ColumnSpan="3" Grid.Column="0" Background="#333131" BorderThickness="2" BorderBrush="White"/>
+        <Border Grid.Row="0" Grid.ColumnSpan="3" Grid.Column="0" Background="{DynamicResource BackgroundBrush}" BorderThickness="2" BorderBrush="White"/>
         <Viewbox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Stretch="Uniform" StretchDirection="DownOnly">
-            <TextBlock Text="Instruktioner för användning av Lager Automation"  FontSize="24" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" Margin="10"/>
+            <TextBlock Text="Instruktioner för användning av Lager Automation"  FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" HorizontalAlignment="Center" 
+                       Margin="10"/>
         </Viewbox>
        
         <!-- Left side -->
-        <Border Grid.Row="1" Grid.Column="0" BorderBrush="White" BorderThickness="2" Padding="5" Background="#333131">
+        <Border Grid.Row="1" Grid.Column="0" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" Padding="5" Background="{DynamicResource PanelBrush}">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel Margin="10,0,10,0">
-                    <TextBlock Text="Välj vad du vill ha hjälp med" FontSize="16" Foreground="White" Margin="0,5,0,30"/>
+                    <TextBlock Text="Välj vad du vill ha hjälp med" FontSize="16" Foreground="{DynamicResource TextBrush}"  Margin="0,5,0,30"/>
                     <Button x:Name="RackHelpButton" Content="1. Ställage" Width="150" Height="30" FontSize="12" Background="#2D89EF" Foreground="White" HorizontalAlignment="Center" Margin="0,10,0,0"
                         Click="RackHelpButton_Click"/>
                     <Button x:Name="FloorHelpButton" Content="2. Golvplats" Width="150" Height="30" FontSize="12" Background="#2D89EF" Foreground="White" HorizontalAlignment="Center" Margin="0,10,0,0"
@@ -40,7 +41,7 @@
         </Border>
         
         <!-- Right side -->
-        <Border Grid.Row="1" Grid.Column="2" BorderBrush="White" BorderThickness="2" Padding="5" Background="#333131">
+        <Border Grid.Row="1" Grid.Column="2" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="2" Padding="5" Background="{DynamicResource BackgroundBrush}">
 
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <StackPanel x:Name="HelpContentPanel" Margin="10">

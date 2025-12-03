@@ -6,10 +6,11 @@
         xmlns:local="clr-namespace:Lager_automation.Views"
         mc:Ignorable="d"
         Title="Skapa golvplats"
-        Height="500"
-        Width="600"
+        Height="400"
+        Width="300"
         WindowStartupLocation="CenterOwner"
-        Background="#1E1E1E">
+        Background="{DynamicResource BackgroundBrush}">
+    
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -20,15 +21,21 @@
             <!-- Buttons -->
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Välj golvplatsens egenskaper" Foreground="White" FontSize="18" Margin="0,0,0,10"/>
+        <TextBlock Text="Välj golvplatsens egenskaper" Foreground="{DynamicResource TextBrush}" FontSize="18" Margin="0,0,0,10"/>
 
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Background="#2B2B2B" Padding="10" BorderBrush="#444" BorderThickness="1">
-            <StackPanel x:Name="FloorSelectorPanel" Orientation="Vertical" Margin="0,5,0,5"/>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Background="{DynamicResource BackgroundBrush}" Padding="10"
+                      BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1">
+            <Grid x:Name="FloorSelectorPanel">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+            </Grid>
         </ScrollViewer>
         
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
-            <Button Content="Avbryt" Width="100" Margin="5" Click="Cancel_Click"/>
-            <Button Content="Spara" Width="120" Margin="5" Background="#2D89EF" Foreground="White" Click="Save_Click"/>
+            <Button Content="Avbryt" Width="100" Margin="5" Click="Cancel_Click" Background="Tomato"/>
+            <Button Content="Spara" Width="120" Margin="5" Background="#6FA63D" Foreground="White" Click="Save_Click"/>
         </StackPanel>
     </Grid>
+    
 </Window>
