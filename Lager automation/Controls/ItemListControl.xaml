@@ -27,7 +27,7 @@
             </Border>
 
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Width="500" MaxHeight="400" >
-                <StackPanel x:Name="ItemsPanel" Orientation="Vertical" AllowDrop="True" />
+                <StackPanel x:Name="ItemsPanel" Orientation="Vertical" AllowDrop="True"/>
             </ScrollViewer>
         </Grid>
     </Border>

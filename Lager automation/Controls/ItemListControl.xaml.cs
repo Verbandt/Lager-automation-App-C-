@@ -54,8 +54,6 @@ namespace Lager_automation.Controls
             AddClicked?.Invoke(this, e);
         }
 
-        // Register a child row (DockPanel) to be draggable.
-        // Call this after adding the child to ItemsHost.
         public void RegisterDraggable(UIElement element)
         {
             if (element == null) return;

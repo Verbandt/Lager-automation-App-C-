@@ -1,4 +1,5 @@
-﻿using Lager_automation.ViewModels;
+﻿using Lager_automation.Models;
+using Lager_automation.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -10,6 +11,7 @@ namespace Lager_automation.Controls
         public FilterControl()
         {
             InitializeComponent();
+
         }
 
         public FilterViewModel Filter

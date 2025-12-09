@@ -7,6 +7,8 @@
         xmlns:local="clr-namespace:Lager_automation"
         xmlns:models="clr-namespace:Lager_automation.Models"
         xmlns:controls="clr-namespace:Lager_automation.Controls"
+        xmlns:excel="models.Excel"
+        xmlns:uiModels="models.Ui"
         WindowStartupLocation="CenterScreen"
         Title="MainWindow" Width="1400" Height="788"  Background="{DynamicResource BackgroundBrush}"
         mc:Ignorable="d">

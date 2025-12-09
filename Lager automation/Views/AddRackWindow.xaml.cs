@@ -92,6 +92,7 @@ namespace Lager_automation.Views
                 Name = "CriteriaSelector"
             };
 
+            criteriaCombo.Items.Add("Resten");
             criteriaCombo.Items.Add("Fabrik");
             criteriaCombo.Items.Add("Utlastningsplats");
             criteriaCombo.Items.Add("Kund");

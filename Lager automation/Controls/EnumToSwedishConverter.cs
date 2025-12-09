@@ -13,7 +13,8 @@ namespace Lager_automation.Controls
         {
             { FilterCriteria.Factory, "Fabrik" },
             { FilterCriteria.Customer, "Kund" },
-            { FilterCriteria.StackingHeight, "Staplingshöjd" }
+            { FilterCriteria.StackingHeight, "Staplingshöjd" },
+            { FilterCriteria.TheRest, "Alla / Resten" }
         };
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

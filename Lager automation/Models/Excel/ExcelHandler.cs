@@ -1,11 +1,6 @@
 ﻿using IronXL;
 using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Lager_automation.Models
@@ -34,16 +29,18 @@ namespace Lager_automation.Models
             }
         }
 
-        public void LoadExcelFile()
+
+        public WorkSheet? ImportExcelFile()
         {
             string? path = SelectedFile();
             if (path == null)
-                return;
+                return null;
 
             try
             {
                 WorkBook workbook = WorkBook.Load(path);
                 WorkSheet worksheet = workbook.WorkSheets[0];
+                return worksheet;
             }
 
             catch (IOException ioEx) when
@@ -51,17 +48,31 @@ namespace Lager_automation.Models
                  ioEx.Message.Contains("access") ||
                  ioEx.HResult == -2147024864)
             {
-                   MessageBox.Show("Filen är redan öppen i ett annat program. Vänligen stäng filen och försök igen.");
+                MessageBox.Show("Filen är redan öppen i ett annat program. Vänligen stäng filen och försök igen.");
+                return null;
             }
             catch (Exception ex)
             {
 
                 MessageBox.Show("Fel vid inläsning av Excel-fil: " + ex.Message);
+                return null;
             }
-            
         }
 
+        public bool LoadExcelFile()
+        {
+            WorkSheet? worksheet = ImportExcelFile();
 
+            if (worksheet == null)
+                return false;
+
+            VerifyFileContent(worksheet);
+
+
+            return true; // la in för att inte crasha programmet under testning
+
+
+        }
         private void VerifyFileContent(WorkSheet worksheet)
         {
             

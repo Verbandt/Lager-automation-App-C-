@@ -44,7 +44,7 @@ namespace Lager_automation.Views
             AddNumericFieldWithUnlock("Tonnage per m²:", 0, 10);
 
             // 4. Criteria (default Factory)
-            AddComboBox("Kriterier:", ["Fabrik", "Kund", "EmbTyp"]);
+            AddComboBox("Kriterier:", ["Resten", "Fabrik", "Kund", "EmbTyp"]);
         }
 
         private void AddComboBox(string labelText, List<string> options)

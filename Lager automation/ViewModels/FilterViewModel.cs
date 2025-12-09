@@ -27,10 +27,16 @@ namespace Lager_automation.ViewModels
             get => _selectedCriteria;
             set
             {
-                if (value == _selectedCriteria) return;
+                if (value == _selectedCriteria)
+                    return;
+
                 _selectedCriteria = value;
-                // Changing criteria can affect how the input is normalized/validated.
-                // Notify both the criteria and the input so the UI updates.
+
+                if (value == FilterCriteria.TheRest)
+                {
+                    InputValue = "";
+                }
+
                 Notify(nameof(SelectedCriteria));
                 Notify(nameof(InputValue));
             }

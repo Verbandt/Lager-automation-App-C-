@@ -25,14 +25,33 @@
 
         <DataTemplate x:Key="FactoryTemplate">
             <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                     FontSize="20"
-                     Padding="2"
-                     TextOptions.TextFormattingMode="Display"
-                     ToolTipService.InitialShowDelay="200"
-                     ToolTipService.ShowDuration="15000">
+             FontSize="20"
+             Padding="2"
+             TextOptions.TextFormattingMode="Display"
+             ToolTipService.InitialShowDelay="200"
+             ToolTipService.ShowDuration="15000">
+
+                <!-- DISABLE TEXTBOX WHEN SelectedCriteria == TheRest -->
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="Background" Value="{DynamicResource TextFieldBrush}" />
+                        <Setter Property="IsReadOnly" Value="False"/>
+                        <Setter Property="IsHitTestVisible" Value="True"/>
+
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedCriteria}" Value="TheRest">
+                                <Setter Property="IsReadOnly" Value="True"/>
+                                <Setter Property="IsHitTestVisible" Value="False"/>
+                                <Setter Property="Background" Value="Gray"/>
+                                <Setter Property="Foreground" Value="DarkGray"/>
+                                <Setter Property="Text" Value=""/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+
                 <TextBox.ToolTip>
                     <MultiBinding Converter="{StaticResource CriteriaHelpConverter}">
-                        <!-- DataContext here is the Filter object -->
                         <Binding Path="SelectedCriteria"/>
                         <Binding Path="InputValue"/>
                     </MultiBinding>
@@ -41,8 +60,29 @@
         </DataTemplate>
 
         <DataTemplate x:Key="CustomerTemplate">
-            <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="20"
-                     ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="15000">
+            <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+             FontSize="20"
+             ToolTipService.InitialShowDelay="200"
+             ToolTipService.ShowDuration="15000">
+
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="Background" Value="{DynamicResource TextFieldBrush}" />
+                        <Setter Property="IsReadOnly" Value="False"/>
+                        <Setter Property="IsHitTestVisible" Value="True"/>
+
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedCriteria}" Value="TheRest">
+                                <Setter Property="IsReadOnly" Value="True"/>
+                                <Setter Property="IsHitTestVisible" Value="False"/>
+                                <Setter Property="Background" Value="Gray"/>
+                                <Setter Property="Foreground" Value="DarkGray"/>
+                                <Setter Property="Text" Value=""/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+
                 <TextBox.ToolTip>
                     <MultiBinding Converter="{StaticResource CriteriaHelpConverter}">
                         <Binding Path="SelectedCriteria"/>
@@ -53,8 +93,29 @@
         </DataTemplate>
 
         <DataTemplate x:Key="StackingHeightTemplate">
-            <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" FontSize="20"
-                     ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="15000">
+            <TextBox Text="{Binding InputValue, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
+             FontSize="20"
+             ToolTipService.InitialShowDelay="200"
+             ToolTipService.ShowDuration="15000">
+
+                <TextBox.Style>
+                    <Style TargetType="TextBox">
+                        <Setter Property="Background" Value="{DynamicResource TextFieldBrush}" />
+                        <Setter Property="IsReadOnly" Value="False"/>
+                        <Setter Property="IsHitTestVisible" Value="True"/>
+
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedCriteria}" Value="TheRest">
+                                <Setter Property="IsReadOnly" Value="True"/>
+                                <Setter Property="IsHitTestVisible" Value="False"/>
+                                <Setter Property="Background" Value="Gray"/>
+                                <Setter Property="Foreground" Value="DarkGray"/>
+                                <Setter Property="Text" Value=""/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+
                 <TextBox.ToolTip>
                     <MultiBinding Converter="{StaticResource CriteriaHelpConverter}">
                         <Binding Path="SelectedCriteria"/>
@@ -67,7 +128,7 @@
         <models:CriteriaTemplateSelector x:Key="CriteriaSelector"
             FactoryTemplate="{StaticResource FactoryTemplate}"
             CustomerTemplate="{StaticResource CustomerTemplate}"
-            StackingHeightTemplate="{StaticResource StackingHeightTemplate}" />
+            StackingHeightTemplate="{StaticResource StackingHeightTemplate}"/>
     </UserControl.Resources>
     
     <Grid>

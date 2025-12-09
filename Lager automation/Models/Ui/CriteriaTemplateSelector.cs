@@ -14,6 +14,7 @@ namespace Lager_automation.Models
         public DataTemplate? FactoryTemplate { get; set; }
         public DataTemplate? CustomerTemplate { get; set; }
         public DataTemplate? StackingHeightTemplate { get; set; }
+        public DataTemplate? TheRestTemplate { get; set; }
 
         public override DataTemplate? SelectTemplate(object item, DependencyObject container)
         {
@@ -24,6 +25,7 @@ namespace Lager_automation.Models
                     FilterCriteria.Factory => FactoryTemplate,
                     FilterCriteria.Customer => CustomerTemplate,
                     FilterCriteria.StackingHeight => StackingHeightTemplate,
+                    FilterCriteria.TheRest => TheRestTemplate,
                     _ => null
                 };
             }
