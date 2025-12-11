@@ -9,6 +9,8 @@
 
     <SolidColorBrush x:Key="TextFieldBrush" Color="#F2F2F2"/>
 
+    <SolidColorBrush x:Key="CriteriaBrush" Color="#CC7100"/>
+
     <!-- Text -->
     <SolidColorBrush x:Key="TextBrush" Color="Black"/>
 

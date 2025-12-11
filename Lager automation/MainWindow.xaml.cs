@@ -1,10 +1,12 @@
 ﻿using Lager_automation.Models;
 using Lager_automation.ViewModels;
 using Lager_automation.Views;
+using System.Data;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
+using System.Windows.Media;
 
 namespace Lager_automation
 {
@@ -93,28 +95,26 @@ namespace Lager_automation
         {
             var row = new DockPanel
             {
-                Margin = new Thickness(5),
-                Background = new System.Windows.Media.SolidColorBrush(
-                    System.Windows.Media.Color.FromRgb(40, 40, 40))
+                Margin = new Thickness(5)
             };
+            row.SetResourceReference(DockPanel.BackgroundProperty, "PanelBrush");
 
             var nameBlock = new TextBlock
             {
                 Text = template.Name,
-                Foreground = System.Windows.Media.Brushes.White,
                 FontSize = 16,
                 Margin = new Thickness(5)
             };
+            nameBlock.SetResourceReference(TextBlock.ForegroundProperty, "TextBrush");
 
             var criteriaBlock = new TextBlock
             {
                 Text = $"| {template.Criteria} |",
-                Foreground = System.Windows.Media.Brushes.Orange,
                 FontSize = 16,
                 Margin = new Thickness(20, 5, 5, 5)
             };
+            criteriaBlock.SetResourceReference(TextBlock.ForegroundProperty, "CriteriaBrush");
 
-            // edit button
             var editButton = new Button
             {
                 Content = "✎",
@@ -122,13 +122,12 @@ namespace Lager_automation
                 Height = 40,
                 FontSize = 24,
                 Margin = new Thickness(5, 0, 0, 0),
-                Background = System.Windows.Media.Brushes.Transparent,
-                Foreground = System.Windows.Media.Brushes.White,
+                Background = Brushes.Transparent,
                 BorderThickness = new Thickness(0)
             };
+            editButton.SetResourceReference(Button.ForegroundProperty, "TextBrush");
             editButton.Click += (s, e) => onEdit(row);
 
-            // delete button
             var deleteButton = new Button
             {
                 Content = "🗑",
@@ -136,10 +135,11 @@ namespace Lager_automation
                 Height = 40,
                 FontSize = 20,
                 Margin = new Thickness(5, 0, 0, 0),
-                Background = System.Windows.Media.Brushes.Transparent,
-                Foreground = System.Windows.Media.Brushes.IndianRed,
+                Background = Brushes.Transparent,
                 BorderThickness = new Thickness(0)
             };
+            // red stays static, so no resource reference
+            deleteButton.Foreground = Brushes.IndianRed;
             deleteButton.Click += (s, e) => onDelete(row);
 
             var buttonPanel = new StackPanel { Orientation = Orientation.Horizontal };
@@ -376,6 +376,16 @@ namespace Lager_automation
 
             Application.Current.Resources.MergedDictionaries.Clear();
             Application.Current.Resources.MergedDictionaries.Add(dict);
+        }
+
+        private void CreateTemplate_Click(object sender, RoutedEventArgs e)
+        {
+            DataTable? dt = ExcelHandler.ImportExcelFile();
+            if (dt != null)
+            {
+                var templateWindow = new InputDataTemplateWindow(dt) { Owner = this };
+                templateWindow.Show();
+            }
         }
     }
 }

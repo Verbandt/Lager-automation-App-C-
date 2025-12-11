@@ -1,0 +1,14 @@
+﻿<Window x:Class="Lager_automation.Views.InputDataTemplateWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Lager_automation.Views"
+        mc:Ignorable="d"
+        Title="InputDataTemplateWindow" Height="600" Width="900"
+        Background="{DynamicResource BackgroundBrush}">
+    <Grid>
+        <DataGrid x:Name="TemplateDataGrid" AutoGenerateColumns="True" Margin="10" Background="{DynamicResource PanelBrush}" 
+                  IsReadOnly="True" SelectionMode="Single" SelectionUnit="FullRow"/>
+    </Grid>
+</Window>

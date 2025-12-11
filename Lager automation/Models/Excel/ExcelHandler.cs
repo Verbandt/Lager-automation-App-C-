@@ -1,5 +1,6 @@
-﻿using IronXL;
+﻿using ClosedXML.Excel;
 using Microsoft.Win32;
+using System.Data;
 using System.IO;
 using System.Windows;
 
@@ -29,8 +30,39 @@ namespace Lager_automation.Models
             }
         }
 
+        public DataTable ToDataTable(WorkSheet sheet)
+        {
+            var dt = new DataTable();
 
-        public WorkSheet? ImportExcelFile()
+            // Header row (row 0)
+            var header = sheet.Rows[0];
+            foreach (var cell in header.Columns)
+            {
+                dt.Columns.Add(cell.StringValue);
+            }
+
+            int rowCount = sheet.Rows.Count();
+
+            // Data rows
+            for (int r = 1; r < rowCount; r++)
+            {
+                var row = sheet.Rows[r];
+                var dataRow = dt.NewRow();
+
+                int colCount = row.Columns.Count();
+
+                for (int c = 0; c < colCount; c++)
+                {
+                    dataRow[c] = row.Columns[c].Value ?? DBNull.Value;
+                }
+
+                dt.Rows.Add(dataRow);
+            }
+
+            return dt;
+        }
+
+        public DataTable? ImportExcelFile()
         {
             string? path = SelectedFile();
             if (path == null)
@@ -38,9 +70,10 @@ namespace Lager_automation.Models
 
             try
             {
-                WorkBook workbook = WorkBook.Load(path);
+                XLWorkbook workbook = XLWorkbook.Load(path);
                 WorkSheet worksheet = workbook.WorkSheets[0];
-                return worksheet;
+                var dt = ToDataTable(workbook.WorkSheets.First());
+                return dt;
             }
 
             catch (IOException ioEx) when
@@ -61,21 +94,23 @@ namespace Lager_automation.Models
 
         public bool LoadExcelFile()
         {
-            WorkSheet? worksheet = ImportExcelFile();
+            DataTable? dt = ImportExcelFile();
 
-            if (worksheet == null)
+            if (dt == null)
                 return false;
 
-            VerifyFileContent(worksheet);
-
-
-            return true; // la in för att inte crasha programmet under testning
+            bool dtIsCorrect = VerifyFileContent(dt);
+            if (!dtIsCorrect)
+                MessageBox.Show("Excel-filen har inte rätt format eller saknar nödvändiga kolumner.");
+                return false;
 
 
         }
-        private void VerifyFileContent(WorkSheet worksheet)
+
+        private bool VerifyFileContent(DataTable dt)
         {
-            
+            return true;
         }
+
     }
 }
