@@ -19,6 +19,12 @@ namespace Lager_automation.Controls
         private bool _isSourceRemoved; // track if we removed the source from the panel during drag
         private bool _dropHandled;
 
+        public bool IsAddButtonEnabled
+        {
+            get => AddButton.IsEnabled;
+            set => AddButton.IsEnabled = value;
+        }
+
         public ItemListControl()
         {
             InitializeComponent();

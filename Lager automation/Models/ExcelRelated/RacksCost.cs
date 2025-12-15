@@ -8,7 +8,7 @@ namespace Lager_automation.Models
 {
     public static class RacksCost
     {
-        public static Dictionary<string, Part> Parts { get; set; } = PartsImporter.ImportParts("C:\\Users\\KMOLLER2\\OneDrive - Volvo Cars\\Desktop\\Johannes hatar HF\\Lager automation\\Stallage lista.xlsx");
+        public static Dictionary<string, Part>? Parts { get; set; }
 
         public static void AddShelfLevel(bool backCover, string typeOfBeam, int beamLength)
         {

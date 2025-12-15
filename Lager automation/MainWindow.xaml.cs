@@ -1,6 +1,8 @@
-﻿using Lager_automation.Models;
+﻿using Lager_automation.Controls;
+using Lager_automation.Models;
 using Lager_automation.ViewModels;
 using Lager_automation.Views;
+using System.ComponentModel;
 using System.Data;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -28,6 +30,8 @@ namespace Lager_automation
         private const int WM_SIZING = 0x0214;
 
         private bool _isDarkMode = true;
+
+        private bool _forceClose;
 
         [StructLayout(LayoutKind.Sequential)]
         private struct RECT
@@ -386,6 +390,67 @@ namespace Lager_automation
                 var templateWindow = new InputDataTemplateWindow(dt) { Owner = this };
                 templateWindow.Show();
             }
+        }
+
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                SetLoadingState(true);
+                await ExcelHandler.LoadExcelInfoAsync();
+            }
+            catch (TimeoutException ex)
+            {
+                MessageBox.Show(ex.Message, "Excel används", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Excel error");
+            }
+            finally
+            {
+                SetLoadingState(false); // buttons enabled again
+                if (ExcelHandler.RacksPartsDt != null)
+                    RacksCost.Parts =  PartsImporter.ImportParts(ExcelHandler.RacksPartsDt);
+            }
+        }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            // Block closing ONLY while Excel is busy
+            if (ExcelHandler?.IsBusy == true)
+            {
+                e.Cancel = true;
+
+                MessageBox.Show(
+                    "Excel uppdateras just nu.\n\n" +
+                    "Vänligen vänta tills processen är klar.",
+                    "Excel arbetar",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+
+                return; // ⛔ IMPORTANT: stop here
+            }
+
+            // else: not busy → allow normal close
+        }
+
+        private void SetLoadingState(bool isLoading)
+        {
+            CreateTemplate.IsEnabled = !isLoading;
+            ImportExcel.IsEnabled = !isLoading;
+            RackListControl.IsAddButtonEnabled = !isLoading;
+
+            CreateTemplateSpinner.Visibility =
+                isLoading ? Visibility.Visible : Visibility.Collapsed;
+            ImportExcelSpinner.Visibility =
+                 isLoading ? Visibility.Visible : Visibility.Collapsed;
+            RackListControl.AddRackButtonSpinner.Visibility =
+                isLoading ? Visibility.Visible : Visibility.Collapsed;
+
+            CreateTemplateText.Opacity = isLoading ? 0.4 : 1.0;
+            ImportExcelText.Opacity = isLoading ? 0.4 : 1.0;
+            RackListControl.AddButton.Opacity = isLoading ? 0.4 : 1.0;
         }
     }
 }

@@ -7,9 +7,11 @@
         xmlns:local="clr-namespace:Lager_automation"
         xmlns:models="clr-namespace:Lager_automation.Models"
         xmlns:controls="clr-namespace:Lager_automation.Controls"
-        xmlns:excel="models.Excel"
+        xmlns:excel="clr-namespace:Lager_automation.Models.ExcelRelated"
         xmlns:uiModels="models.Ui"
         WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded"
+        Closing="Window_Closing"
         Title="MainWindow" Width="1400" Height="788"  Background="{DynamicResource BackgroundBrush}"
         mc:Ignorable="d">
 
@@ -55,10 +57,20 @@
             <Border Grid.Row="1" Grid.Column="1" Height="205" Width="320" Margin="0,350,0,0" BorderThickness="2" BorderBrush="{DynamicResource BorderBrush}"
                     Background="{DynamicResource PanelBrush}">
                 <StackPanel>
-                    <Button x:Name="CreateTemplate" Content="Skapa mall" Width="200" Height="50" FontSize="18" Background="#2D89EF"
-                        Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0" Click="CreateTemplate_Click"/>
-                    <Button x:Name="ImportExcel" Content="Importera Excelfil" Width="200" Height="50" FontSize="18" Background="#2D89EF"
-                        Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0" Click="ImportExcel_Click"/>
+                    <Button x:Name="CreateTemplate" Width="200" Height="50" FontSize="18" Background="#2D89EF" Foreground="White" Click="CreateTemplate_Click">
+                        <Grid>
+                            <!-- Normal text -->
+                            <TextBlock x:Name="CreateTemplateText" Text="Skapa mall" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <!-- Spinner -->
+                            <ProgressBar x:Name="CreateTemplateSpinner" Width="20" Height="20" IsIndeterminate="True" Visibility="Collapsed"/>
+                        </Grid>
+                    </Button>
+                    <Button x:Name="ImportExcel" Width="200" Height="50" FontSize="18" Background="#2D89EF" Foreground="White" Click="ImportExcel_Click">
+                        <Grid>
+                            <TextBlock x:Name="ImportExcelText" Text="Importera Excelfil" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <ProgressBar x:Name="ImportExcelSpinner" Width="20" Height="20" IsIndeterminate="True" Visibility="Collapsed"/>
+                        </Grid>
+                    </Button>
                     <TextBlock x:Name="SelectedExcelFileTxt"  FontSize="24" Background="{DynamicResource TextFieldBrush}"  HorizontalAlignment="Center" 
                                VerticalAlignment="Top" Margin="0,15,0,0" Width="300"/>
                 </StackPanel>

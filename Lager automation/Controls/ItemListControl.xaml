@@ -19,10 +19,15 @@
                 <DockPanel Margin="5">
                     <TextBlock Text="{Binding Title, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                FontSize="23" Foreground="{DynamicResource TextBrush}" DockPanel.Dock="Left"/>
-                    <Button x:Name="AddButton" Content="+" Width="40" Height="40" FontSize="30"
-                            DockPanel.Dock="Right" Background="#2D89EF" Padding="0,-2,0,0"
-                            Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Center"
-                            Click="AddButton_Click"/>
+                    <Button x:Name="AddButton" Width="40" Height="40" FontSize="30" DockPanel.Dock="Right" Background="#2D89EF" Padding="0,-2,0,0"
+                            Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Center" Click="AddButton_Click">
+                        <Grid>
+                            <!-- Normal text -->
+                            <TextBlock x:Name="AddRackButton" Text="+" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <!-- Spinner -->
+                            <ProgressBar x:Name="AddRackButtonSpinner" Width="20" Height="20" IsIndeterminate="True" Visibility="Collapsed"/>
+                        </Grid>
+                    </Button>
                 </DockPanel>
             </Border>
 
