@@ -65,8 +65,10 @@
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.17.1" />
     <PackageReference Include="ClosedXML" Version="0.105.0" />
+    <PackageReference Include="DataGridExtensions" Version="2.8.0" />
     <PackageReference Include="Microsoft.Graph" Version="5.98.0" />
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="9.0.10" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
   </ItemGroup>
 
   <ItemGroup>

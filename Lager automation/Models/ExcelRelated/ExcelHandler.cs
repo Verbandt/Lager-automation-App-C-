@@ -14,7 +14,6 @@ namespace Lager_automation.Models
     public class ExcelHandler
     {
         
-        private DataTable? ArticlesTable;
         private CancellationTokenSource? _cts;
         public bool IsBusy { get; private set; }
         private Task? _refreshTask;

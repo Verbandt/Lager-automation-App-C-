@@ -1,4 +1,5 @@
-﻿using Lager_automation.Controls;
+﻿using ClosedXML.Excel;
+using Lager_automation.Controls;
 using Lager_automation.Models;
 using Lager_automation.ViewModels;
 using Lager_automation.Views;
@@ -384,7 +385,7 @@ namespace Lager_automation
 
         private void CreateTemplate_Click(object sender, RoutedEventArgs e)
         {
-            DataTable? dt = ExcelHandler.ImportExcelFile();
+            DataTable? dt = ExcelHandler.ArticleInfoDt;
             if (dt != null)
             {
                 var templateWindow = new InputDataTemplateWindow(dt) { Owner = this };
@@ -394,25 +395,39 @@ namespace Lager_automation
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                SetLoadingState(true);
-                await ExcelHandler.LoadExcelInfoAsync();
-            }
-            catch (TimeoutException ex)
-            {
-                MessageBox.Show(ex.Message, "Excel används", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Excel error");
-            }
-            finally
-            {
-                SetLoadingState(false); // buttons enabled again
-                if (ExcelHandler.RacksPartsDt != null)
-                    RacksCost.Parts =  PartsImporter.ImportParts(ExcelHandler.RacksPartsDt);
-            }
+            // try
+            // {
+            //     SetLoadingState(true);
+            //     await ExcelHandler.LoadExcelInfoAsync();
+            // }
+            // catch (TimeoutException ex)
+            // {
+            //     MessageBox.Show(ex.Message, "Excel används", MessageBoxButton.OK, MessageBoxImage.Warning);
+            // }
+            // catch (Exception ex)
+            // {
+            //     MessageBox.Show(ex.Message, "Excel error");
+            // }
+            // finally
+            // {
+            //     SetLoadingState(false); // buttons enabled again
+            //     if (ExcelHandler.RacksPartsDt != null)
+            //         RacksCost.Parts =  PartsImporter.ImportParts(ExcelHandler.RacksPartsDt);
+            // }
+
+            //const string AritcleExcelPath = @"\\olognmhm01.olo.volvocars.net\PROJ\9406_Logistic_Layout\PSCE\KiMö\Lager automation\artikeldata.xlsx";
+            const string AritcleExcelPath = @"C:\Users\KMOLLER2\OneDrive - Volvo Cars\Documents\artikeldata.xlsx";
+            const string RackspartsExcelPath = @"\\olognmhm01.olo.volvocars.net\PROJ\9406_Logistic_Layout\PSCE\KiMö\Lager automation\stallage lista.xlsx";
+
+            XLWorkbook workbook = new(AritcleExcelPath);
+            IXLWorksheet worksheet = workbook.Worksheet(1);
+
+            ExcelHandler.ArticleInfoDt = ExcelHandler.ToDataTable(worksheet);
+
+            XLWorkbook workbook1 = new(RackspartsExcelPath);
+            IXLWorksheet worksheet1 = workbook1.Worksheet(1);
+
+            ExcelHandler.RacksPartsDt = ExcelHandler.ToDataTable(worksheet1);
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)

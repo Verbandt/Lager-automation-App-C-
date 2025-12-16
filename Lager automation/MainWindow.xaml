@@ -7,7 +7,6 @@
         xmlns:local="clr-namespace:Lager_automation"
         xmlns:models="clr-namespace:Lager_automation.Models"
         xmlns:controls="clr-namespace:Lager_automation.Controls"
-        xmlns:excel="clr-namespace:Lager_automation.Models.ExcelRelated"
         xmlns:uiModels="models.Ui"
         WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded"
@@ -57,10 +56,10 @@
             <Border Grid.Row="1" Grid.Column="1" Height="205" Width="320" Margin="0,350,0,0" BorderThickness="2" BorderBrush="{DynamicResource BorderBrush}"
                     Background="{DynamicResource PanelBrush}">
                 <StackPanel>
-                    <Button x:Name="CreateTemplate" Width="200" Height="50" FontSize="18" Background="#2D89EF" Foreground="White" Click="CreateTemplate_Click">
+                    <Button x:Name="CreateTemplate" Width="200" Height="50" FontSize="18" Background="#2D89EF" Foreground="White" Click="CreateTemplate_Click" Margin="0,10,0,5">
                         <Grid>
                             <!-- Normal text -->
-                            <TextBlock x:Name="CreateTemplateText" Text="Skapa mall" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="CreateTemplateText" Text="Använd databas" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             <!-- Spinner -->
                             <ProgressBar x:Name="CreateTemplateSpinner" Width="20" Height="20" IsIndeterminate="True" Visibility="Collapsed"/>
                         </Grid>

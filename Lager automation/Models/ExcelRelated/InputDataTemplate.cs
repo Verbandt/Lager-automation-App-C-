@@ -1,4 +1,4 @@
-﻿namespace Lager_automation.Models.ExcelRelated
+﻿namespace Lager_automation.Models
 {
     class InputDataTemplate
     {

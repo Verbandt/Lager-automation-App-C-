@@ -17,8 +17,6 @@ namespace Lager_automation.Models
         
         const int RefreshTimeoutSeconds = 120;
 
-        
-
         public static bool IsFileLocked(string path)
         {
             try
