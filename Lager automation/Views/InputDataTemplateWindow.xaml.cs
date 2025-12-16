@@ -84,8 +84,6 @@ namespace Lager_automation.Views
         }
 
 
-
-
         private void RefreshFilter()
         {
             _view.Refresh();
@@ -96,73 +94,220 @@ namespace Lager_automation.Views
             var button = (Button)sender;
             string column = (string)button.Tag;
 
+            // Ensure filter exists
             if (!_filters.ContainsKey(column))
                 _filters[column] = new HashSet<string>(_allValues[column]);
 
+            // 🔒 Transaction copy (popup-local state)
+            var tempFilter = new HashSet<string>(_filters[column]);
             var values = _allValues[column];
-            var panel = new StackPanel { Background = Brushes.White };
 
-            // buttons
-            var btnPanel = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(5) };
+            // =========================
+            // TOP PANEL (fixed)
+            // =========================
+            var topPanel = new StackPanel
+            {
+                Background = Brushes.White
+            };
 
-            var selectAll = new Button { Content = "Select all", Margin = new Thickness(0, 0, 5, 0) };
-            var unselectAll = new Button { Content = "Unselect all" };
+            // 🔍 Search
+            var searchBox = new TextBox
+            {
+                Margin = new Thickness(5),
+                Height = 24,
+                ToolTip = "Sök värden..."
+            };
+            topPanel.Children.Add(searchBox);
 
-            btnPanel.Children.Add(selectAll);
-            btnPanel.Children.Add(unselectAll);
-            panel.Children.Add(btnPanel);
-            panel.Children.Add(new Separator());
+            // 🧹 Clear filter
+            var clearFilterBtn = new Button
+            {
+                Content = "Rensa filter",
+                Margin = new Thickness(5)
+            };
+            topPanel.Children.Add(clearFilterBtn);
 
+            // ☑ Markera alla
+            var selectAllCheckBox = new CheckBox
+            {
+                Content = "Markera alla",
+                Margin = new Thickness(5, 2, 5, 5),
+                FontWeight = FontWeights.SemiBold
+            };
+            topPanel.Children.Add(selectAllCheckBox);
+
+            topPanel.Children.Add(new Separator());
+
+            // =========================
+            // CHECKBOX LIST (scrollable)
+            // =========================
+            var checkboxPanel = new StackPanel();
             var checkBoxes = new List<CheckBox>();
+
+            bool updatingSelectAll = false;
+
+            void SetMarkeraAlla(bool? state)
+            {
+                updatingSelectAll = true;
+                selectAllCheckBox.IsChecked = state;
+                updatingSelectAll = false;
+            }
 
             foreach (var v in values)
             {
                 var cb = new CheckBox
                 {
                     Content = v,
-                    IsChecked = _filters[column].Contains(v),
-                    Margin = new Thickness(5, 2, 5, 2)
+                    Margin = new Thickness(5, 2, 5, 2),
+                    IsChecked = tempFilter.Contains(v)
                 };
 
                 cb.Checked += (_, __) =>
                 {
-                    _filters[column].Add(v);
-                    RefreshFilter();
+                    tempFilter.Add(v);
+                    SetMarkeraAlla(tempFilter.Count == values.Count);
                 };
 
                 cb.Unchecked += (_, __) =>
                 {
-                    _filters[column].Remove(v);
-                    RefreshFilter();
+                    tempFilter.Remove(v);
+                    SetMarkeraAlla(false);
                 };
 
                 checkBoxes.Add(cb);
-                panel.Children.Add(cb);
+                checkboxPanel.Children.Add(cb);
             }
 
-            selectAll.Click += (_, __) =>
+            SetMarkeraAlla(tempFilter.Count == values.Count);
+
+            // 🔄 Markera alla behavior
+            selectAllCheckBox.Checked += (_, __) =>
             {
-                _filters[column].Clear();
+                if (updatingSelectAll) return;
+
+                tempFilter.Clear();
                 foreach (var v in values)
-                    _filters[column].Add(v);
+                    tempFilter.Add(v);
 
                 foreach (var cb in checkBoxes)
                     cb.IsChecked = true;
-
-                RefreshFilter();
             };
 
-            unselectAll.Click += (_, __) =>
+            selectAllCheckBox.Unchecked += (_, __) =>
             {
-                _filters[column].Clear();
+                if (updatingSelectAll) return;
 
+                tempFilter.Clear();
                 foreach (var cb in checkBoxes)
                     cb.IsChecked = false;
-
-                RefreshFilter();
             };
 
-            new Popup
+            // 🔍 Search (UI only)
+            searchBox.TextChanged += (_, __) =>
+            {
+                string search = searchBox.Text.Trim();
+
+                foreach (var cb in checkBoxes)
+                {
+                    var text = cb.Content?.ToString() ?? "";
+                    cb.Visibility =
+                        string.IsNullOrEmpty(search) ||
+                        text.Contains(search, StringComparison.OrdinalIgnoreCase)
+                            ? Visibility.Visible
+                            : Visibility.Collapsed;
+                }
+            };
+
+            // 🧹 Clear filter (popup only)
+            clearFilterBtn.Click += (_, __) =>
+            {
+                tempFilter.Clear();
+                foreach (var v in values)
+                    tempFilter.Add(v);
+
+                searchBox.Text = "";
+                SetMarkeraAlla(true);
+
+                foreach (var cb in checkBoxes)
+                {
+                    cb.Visibility = Visibility.Visible;
+                    cb.IsChecked = true;
+                }
+            };
+
+            // =========================
+            // BOTTOM PANEL (fixed)
+            // =========================
+            var okBtn = new Button
+            {
+                Content = "OK",
+                Width = 70,
+                Margin = new Thickness(0, 0, 5, 0)
+            };
+
+            var cancelBtn = new Button
+            {
+                Content = "Avbryt",
+                Width = 70
+            };
+
+            var bottomPanel = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                Margin = new Thickness(5)
+            };
+
+            bottomPanel.Children.Add(okBtn);
+            bottomPanel.Children.Add(cancelBtn);
+
+            // =========================
+            // ROOT GRID (layout fix)
+            // =========================
+            var rootGrid = new Grid
+            {
+                Width = 260,
+                Background = Brushes.White
+            };
+
+            rootGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            rootGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            rootGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+
+            Grid.SetRow(topPanel, 0);
+            rootGrid.Children.Add(topPanel);
+
+            var scrollViewer = new ScrollViewer
+            {
+                Content = checkboxPanel,
+                MaxHeight = 250
+            };
+
+            Grid.SetRow(scrollViewer, 1);
+            rootGrid.Children.Add(scrollViewer);
+
+            Grid.SetRow(bottomPanel, 2);
+            rootGrid.Children.Add(bottomPanel);
+
+            // =========================
+            // POPUP
+            // =========================
+            bool applyChanges = false;
+            Popup popup = null!;
+
+            okBtn.Click += (_, __) =>
+            {
+                applyChanges = true;
+                popup.IsOpen = false;
+            };
+
+            cancelBtn.Click += (_, __) =>
+            {
+                applyChanges = false;
+                popup.IsOpen = false;
+            };
+
+            popup = new Popup
             {
                 PlacementTarget = button,
                 Placement = PlacementMode.Bottom,
@@ -173,13 +318,20 @@ namespace Lager_automation.Views
                     BorderBrush = Brushes.Gray,
                     BorderThickness = new Thickness(1),
                     Background = Brushes.White,
-                    Child = new ScrollViewer
-                    {
-                        Content = panel,
-                        MaxHeight = 300,
-                        Width = 220
-                    }
+                    Child = rootGrid
                 }
+            };
+
+            // =========================
+            // COMMIT / ROLLBACK
+            // =========================
+            popup.Closed += (_, __) =>
+            {
+                if (!applyChanges)
+                    return;
+
+                _filters[column] = new HashSet<string>(tempFilter);
+                RefreshFilter();
             };
         }
 

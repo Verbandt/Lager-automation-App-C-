@@ -415,8 +415,8 @@ namespace Lager_automation
             //         RacksCost.Parts =  PartsImporter.ImportParts(ExcelHandler.RacksPartsDt);
             // }
 
-            //const string AritcleExcelPath = @"\\olognmhm01.olo.volvocars.net\PROJ\9406_Logistic_Layout\PSCE\KiMö\Lager automation\artikeldata.xlsx";
-            const string AritcleExcelPath = @"C:\Users\KMOLLER2\OneDrive - Volvo Cars\Documents\artikeldata.xlsx";
+            const string AritcleExcelPath = @"\\olognmhm01.olo.volvocars.net\PROJ\9406_Logistic_Layout\PSCE\KiMö\Lager automation\artikeldata.xlsx";
+            //const string AritcleExcelPath = @"C:\Users\KMOLLER2\OneDrive - Volvo Cars\Documents\artikeldata.xlsx";
             const string RackspartsExcelPath = @"\\olognmhm01.olo.volvocars.net\PROJ\9406_Logistic_Layout\PSCE\KiMö\Lager automation\stallage lista.xlsx";
 
             XLWorkbook workbook = new(AritcleExcelPath);
