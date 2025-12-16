@@ -19,6 +19,10 @@ namespace Lager_automation.Views
         private readonly DataTable _table;
         private ICollectionView _view;
 
+        private readonly Dictionary<string, Button> _filterButtons = new();
+        private const string FilterOffIcon = "⏷";
+        private const string FilterOnIcon = "▼";
+
         // column -> allowed values
         private readonly Dictionary<string, HashSet<string>> _filters = new();
 
@@ -332,6 +336,9 @@ namespace Lager_automation.Views
 
                 _filters[column] = new HashSet<string>(tempFilter);
                 RefreshFilter();
+
+                // 🔹 update icon
+                UpdateFilterIcon(column);
             };
         }
 
@@ -368,7 +375,7 @@ namespace Lager_automation.Views
 
             var button = new Button
             {
-                Content = "▼",
+                Content = FilterOffIcon,
                 Width = 18,
                 Height = 18,
                 Padding = new Thickness(0),
@@ -378,11 +385,31 @@ namespace Lager_automation.Views
 
             button.Click += OpenFilterPopup;
 
+            // 🔹 store reference
+            _filterButtons[columnName] = button;
+
             panel.Children.Add(button);
 
             return panel;
         }
 
+        private void UpdateFilterIcon(string column)
+        {
+            if (!_filterButtons.TryGetValue(column, out var button))
+                return;
+
+            // no filter or full selection → normal icon
+            if (!_filters.ContainsKey(column) ||
+                _filters[column].Count == _allValues[column].Count)
+            {
+                button.Content = FilterOffIcon;
+            }
+            else
+            {
+                // active filter
+                button.Content = FilterOnIcon;
+            }
+        }
 
 
     }
