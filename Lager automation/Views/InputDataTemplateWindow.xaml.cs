@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 
@@ -51,7 +52,6 @@ namespace Lager_automation.Views
         }
 
 
-
         private void CacheAllColumnValues()
         {
             _allValues.Clear();
@@ -87,7 +87,6 @@ namespace Lager_automation.Views
             return true;
         }
 
-
         private void RefreshFilter()
         {
             _view.Refresh();
@@ -107,14 +106,10 @@ namespace Lager_automation.Views
             var values = _allValues[column];
 
             // =========================
-            // TOP PANEL (fixed)
+            // TOP PANEL
             // =========================
-            var topPanel = new StackPanel
-            {
-                Background = Brushes.White
-            };
+            var topPanel = new StackPanel { Background = Brushes.White };
 
-            // 🔍 Search
             var searchBox = new TextBox
             {
                 Margin = new Thickness(5),
@@ -123,7 +118,6 @@ namespace Lager_automation.Views
             };
             topPanel.Children.Add(searchBox);
 
-            // 🧹 Clear filter
             var clearFilterBtn = new Button
             {
                 Content = "Rensa filter",
@@ -131,7 +125,6 @@ namespace Lager_automation.Views
             };
             topPanel.Children.Add(clearFilterBtn);
 
-            // ☑ Markera alla
             var selectAllCheckBox = new CheckBox
             {
                 Content = "Markera alla",
@@ -143,7 +136,7 @@ namespace Lager_automation.Views
             topPanel.Children.Add(new Separator());
 
             // =========================
-            // CHECKBOX LIST (scrollable)
+            // CHECKBOX LIST
             // =========================
             var checkboxPanel = new StackPanel();
             var checkBoxes = new List<CheckBox>();
@@ -184,7 +177,6 @@ namespace Lager_automation.Views
 
             SetMarkeraAlla(tempFilter.Count == values.Count);
 
-            // 🔄 Markera alla behavior
             selectAllCheckBox.Checked += (_, __) =>
             {
                 if (updatingSelectAll) return;
@@ -206,7 +198,6 @@ namespace Lager_automation.Views
                     cb.IsChecked = false;
             };
 
-            // 🔍 Search (UI only)
             searchBox.TextChanged += (_, __) =>
             {
                 string search = searchBox.Text.Trim();
@@ -214,33 +205,27 @@ namespace Lager_automation.Views
                 foreach (var cb in checkBoxes)
                 {
                     var text = cb.Content?.ToString() ?? "";
-                    cb.Visibility =
+                    bool visible =
                         string.IsNullOrEmpty(search) ||
-                        text.Contains(search, StringComparison.OrdinalIgnoreCase)
-                            ? Visibility.Visible
-                            : Visibility.Collapsed;
+                        text.Contains(search, StringComparison.OrdinalIgnoreCase);
+
+                    cb.Visibility = visible ? Visibility.Visible : Visibility.Collapsed;
+
+                    // 🔹 NEW: auto-check visible items (transaction-only)
+                    if (visible)
+                    {
+                        cb.IsChecked = true;
+                        tempFilter.Add(text);
+                    }
                 }
+
+                // Update "Markera alla" checkbox correctly
+                SetMarkeraAlla(tempFilter.Count == values.Count);
             };
 
-            // 🧹 Clear filter (popup only)
-            clearFilterBtn.Click += (_, __) =>
-            {
-                tempFilter.Clear();
-                foreach (var v in values)
-                    tempFilter.Add(v);
-
-                searchBox.Text = "";
-                SetMarkeraAlla(true);
-
-                foreach (var cb in checkBoxes)
-                {
-                    cb.Visibility = Visibility.Visible;
-                    cb.IsChecked = true;
-                }
-            };
-
+          
             // =========================
-            // BOTTOM PANEL (fixed)
+            // BOTTOM PANEL
             // =========================
             var okBtn = new Button
             {
@@ -266,7 +251,7 @@ namespace Lager_automation.Views
             bottomPanel.Children.Add(cancelBtn);
 
             // =========================
-            // ROOT GRID (layout fix)
+            // ROOT GRID
             // =========================
             var rootGrid = new Grid
             {
@@ -286,7 +271,6 @@ namespace Lager_automation.Views
                 Content = checkboxPanel,
                 MaxHeight = 250
             };
-
             Grid.SetRow(scrollViewer, 1);
             rootGrid.Children.Add(scrollViewer);
 
@@ -299,24 +283,43 @@ namespace Lager_automation.Views
             bool applyChanges = false;
             Popup popup = null!;
 
-            okBtn.Click += (_, __) =>
+            // 🔹 SHARED OK LOGIC (used by OK + Enter)
+            Action applyOk = () =>
             {
                 applyChanges = true;
 
-                // 🔹 Build filter from VISIBLE + CHECKED items
                 tempFilter.Clear();
-
                 foreach (var cb in checkBoxes)
                 {
-                    if (cb.Visibility == Visibility.Visible &&
-                        cb.IsChecked == true)
-                    {
+                    if (cb.Visibility == Visibility.Visible && cb.IsChecked == true)
                         tempFilter.Add(cb.Content?.ToString() ?? "");
-                    }
                 }
 
                 popup.IsOpen = false;
             };
+
+            clearFilterBtn.Click += (_, __) =>
+            {
+                // Reset selection
+                tempFilter.Clear();
+                foreach (var v in values)
+                    tempFilter.Add(v);
+
+                // Reset UI
+                searchBox.Text = "";
+                SetMarkeraAlla(true);
+
+                foreach (var cb in checkBoxes)
+                {
+                    cb.Visibility = Visibility.Visible;
+                    cb.IsChecked = true;
+                }
+
+                // 🔹 Apply immediately (same as OK)
+                applyOk();
+            };
+
+            okBtn.Click += (_, __) => applyOk();
 
             cancelBtn.Click += (_, __) =>
             {
@@ -339,6 +342,26 @@ namespace Lager_automation.Views
                 }
             };
 
+            // 🔑 ENTER = OK, ESC = Cancel (robust)
+            rootGrid.AddHandler(
+                Keyboard.PreviewKeyDownEvent,
+                new KeyEventHandler((s, e2) =>
+                {
+                    if (e2.Key == Key.Enter)
+                    {
+                        applyOk();      // EXACT same logic as OK
+                        e2.Handled = true;
+                    }
+                    else if (e2.Key == Key.Escape)
+                    {
+                        applyChanges = false;
+                        popup.IsOpen = false;
+                        e2.Handled = true;
+                    }
+                }),
+                true
+            );
+
             // =========================
             // COMMIT / ROLLBACK
             // =========================
@@ -349,12 +372,9 @@ namespace Lager_automation.Views
 
                 _filters[column] = new HashSet<string>(tempFilter);
                 RefreshFilter();
-
-                // 🔹 update icon
                 UpdateFilterIcon(column);
             };
         }
-
 
         private void GenerateColumns()
         {
@@ -371,39 +391,37 @@ namespace Lager_automation.Views
             }
         }
 
-
         private object CreateFilterHeader(string columnName)
         {
-            var panel = new StackPanel
-            {
-                Orientation = Orientation.Horizontal
-            };
+            var grid = new Grid();
 
-            panel.Children.Add(new TextBlock
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+
+            var text = new TextBlock
             {
                 Text = columnName,
-                Margin = new Thickness(0, 0, 4, 0),
                 VerticalAlignment = VerticalAlignment.Center
-            });
+            };
+            Grid.SetColumn(text, 0);
+            grid.Children.Add(text);
 
             var button = new Button
             {
-                Content = FilterOffIcon,
+                Content = "▼",
                 Width = 18,
                 Height = 18,
                 Padding = new Thickness(0),
-                Margin = new Thickness(2, 0, 0, 0),
-                Tag = columnName
+                Tag = columnName,
+                Margin = new Thickness(6, 0, 2, 0),
+                HorizontalAlignment = HorizontalAlignment.Right
             };
-
             button.Click += OpenFilterPopup;
 
-            // 🔹 store reference
-            _filterButtons[columnName] = button;
+            Grid.SetColumn(button, 1);
+            grid.Children.Add(button);
 
-            panel.Children.Add(button);
-
-            return panel;
+            return grid;
         }
 
         private void UpdateFilterIcon(string column)

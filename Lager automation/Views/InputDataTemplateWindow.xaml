@@ -7,13 +7,71 @@
         mc:Ignorable="d"
         Title="InputDataTemplateWindow" Height="900" Width="1600"
         Background="{DynamicResource BackgroundBrush}">
-    
-    <Grid>
 
+    <Window.Resources>
+        <!-- Right-align ALL DataGrid cell content -->
+        <Style TargetType="DataGridCell">
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="6,2"/>
+        </Style>
+
+        <!-- Column header content layout -->
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="{DynamicResource PanelBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+        </Style>
+    </Window.Resources>
+    
+    <Grid Background="{DynamicResource BackgroundBrush}">
+        <Grid.Resources>
+            <Style TargetType="DataGrid">
+                <Setter Property="Background" Value="{DynamicResource PanelBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}" />
+                <Setter Property="BorderThickness" Value="1"/>
+
+                <!-- Excel-like rows -->
+                <Setter Property="RowBackground" Value="{DynamicResource BackgroundBrush}" />
+                <Setter Property="AlternatingRowBackground" Value="{DynamicResource DatagridAltBg}" />
+                <Setter Property="AlternationCount" Value="2"/>
+
+                <!-- Grid lines -->
+                <Setter Property="GridLinesVisibility" Value="All"/>
+                <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource CellGridLineBrush}"/>
+                <Setter Property="VerticalGridLinesBrush" Value="{DynamicResource CellGridLineBrush}"/>
+
+                <!-- Behavior -->
+                <Setter Property="HeadersVisibility" Value="Column"/>
+                <Setter Property="SelectionMode" Value="Extended"/>
+            </Style>
+
+            <Style TargetType="DataGridColumnHeader">
+                <Setter Property="Background" Value="{DynamicResource PanelBrush}"/>
+                <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+                <Setter Property="BorderThickness" Value="0,0,1,1"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Padding" Value="6,4"/>
+            </Style>
+
+            <Style TargetType="DataGridRow">
+                <Setter Property="Foreground" Value="{DynamicResource DatagridCells}"/>
+            </Style>
+
+
+        </Grid.Resources>
+        
         <DataGrid x:Name="TemplateDataGrid"
           AutoGenerateColumns="False"
           Margin="10"
           CanUserSortColumns="True"
+          FontSize="12"
+          Background="{DynamicResource BackgroundBrush}"
           IsReadOnly="False" />
 
     </Grid>

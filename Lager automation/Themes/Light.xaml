@@ -11,7 +11,10 @@
 
     <SolidColorBrush x:Key="CriteriaBrush" Color="#CC7100"/>
 
+    <SolidColorBrush x:Key="DatagridAltBg" Color="#E2EFDA"/>
+
     <!-- Text -->
     <SolidColorBrush x:Key="TextBrush" Color="Black"/>
+    <SolidColorBrush x:Key="DatagridCells" Color="Black"/>
 
 </ResourceDictionary>
