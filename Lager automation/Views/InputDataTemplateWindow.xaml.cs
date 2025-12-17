@@ -302,6 +302,19 @@ namespace Lager_automation.Views
             okBtn.Click += (_, __) =>
             {
                 applyChanges = true;
+
+                // 🔹 Build filter from VISIBLE + CHECKED items
+                tempFilter.Clear();
+
+                foreach (var cb in checkBoxes)
+                {
+                    if (cb.Visibility == Visibility.Visible &&
+                        cb.IsChecked == true)
+                    {
+                        tempFilter.Add(cb.Content?.ToString() ?? "");
+                    }
+                }
+
                 popup.IsOpen = false;
             };
 
