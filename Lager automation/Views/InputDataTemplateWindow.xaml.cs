@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Lager_automation.Models;
+using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Text;
@@ -17,7 +18,10 @@ namespace Lager_automation.Views
     /// </summary>
     public partial class InputDataTemplateWindow : Window
     {
-        private readonly DataTable _table;
+        private DataTable _table;
+        private readonly DataTable _originalTable;
+        private bool _isResetting;
+
         private ICollectionView _view;
 
         private readonly Dictionary<string, Button> _filterButtons = new();
@@ -35,6 +39,7 @@ namespace Lager_automation.Views
             InitializeComponent();
 
             _table = table;
+            _originalTable = table.Copy();
 
             // Cache original values for filter UI
             CacheAllColumnValues();
@@ -68,8 +73,19 @@ namespace Lager_automation.Views
 
         private bool RowPassesFilter(object item)
         {
+            // 🔑 HARD bypass during reset
+            if (_isResetting)
+                return true;
+
             if (item is not DataRowView row)
                 return false;
+
+            if (row.Row.RowState == DataRowState.Detached ||
+                row.Row.RowState == DataRowState.Deleted)
+                return false;
+
+            if (_filters.Count == 0)
+                return true;
 
             foreach (var kv in _filters)
             {
@@ -89,6 +105,8 @@ namespace Lager_automation.Views
 
         private void RefreshFilter()
         {
+            TemplateDataGrid.CommitEdit(DataGridEditingUnit.Cell, true);
+            TemplateDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
             _view.Refresh();
         }
 
@@ -442,6 +460,103 @@ namespace Lager_automation.Views
             }
         }
 
+        private void UseTable_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
 
+        private void Reset_Click(object sender, RoutedEventArgs e)
+        {
+            _isResetting = true;
+
+            try
+            {
+                // 🔑 Completely detach grid first
+                TemplateDataGrid.ItemsSource = null;
+
+                // Restore table
+                _table.Clear();
+                foreach (DataRow row in _originalTable.Rows)
+                    _table.ImportRow(row);
+
+                // Rebuild row list + view
+                var rows = _table.DefaultView.Cast<DataRowView>().ToList();
+                _view = CollectionViewSource.GetDefaultView(rows);
+                _view.Filter = RowPassesFilter;
+
+                // Clear filters AFTER new view exists
+                _filters.Clear();
+
+                // Rebind grid
+                TemplateDataGrid.ItemsSource = _view;
+
+                foreach (DataColumn col in _table.Columns)
+                    UpdateFilterIcon(col.ColumnName);
+            }
+            finally
+            {
+                _isResetting = false;
+            }
+        }
+
+        private void ExportExcel_Click(object sender, RoutedEventArgs e)
+        {
+            if (_view.IsEmpty)
+            {
+                MessageBox.Show("Inga rader att exportera.", "Export",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            TemplateDataGrid.CommitEdit(DataGridEditingUnit.Cell, true);
+            TemplateDataGrid.CommitEdit(DataGridEditingUnit.Row, true);
+
+            DataTable filteredTable = GetFilteredTable();
+
+            ExcelExporter.ExportToExcel(filteredTable, "Filtrerad Artikeldata.xlsx");
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            ResetTableData();
+            ResetAllFilters();
+            Close();
+        }
+
+        private void ResetAllFilters()
+        {
+            _filters.Clear();
+
+            _view.Refresh();
+
+            // Reset all filter icons
+            foreach (var column in _table.Columns.Cast<DataColumn>())
+            {
+                UpdateFilterIcon(column.ColumnName);
+            }
+        }
+
+        private void ResetTableData()
+        {
+            _table.Clear();
+            foreach (DataRow row in _originalTable.Rows)
+                _table.ImportRow(row);
+        }
+
+        private DataTable GetFilteredTable()
+        {
+            // Clone structure (columns, types)
+            DataTable filtered = _table.Clone();
+
+            foreach (var item in _view)
+            {
+                if (item is DataRowView drv)
+                {
+                    filtered.ImportRow(drv.Row);
+                }
+            }
+
+            return filtered;
+        }
     }
 }

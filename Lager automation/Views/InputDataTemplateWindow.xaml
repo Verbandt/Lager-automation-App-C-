@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lager_automation.Views"
         mc:Ignorable="d"
-        Title="InputDataTemplateWindow" Height="900" Width="1600"
+        Title="InputDataTemplateWindow" Height="900" Width="1680"
         Background="{DynamicResource BackgroundBrush}">
 
     <Window.Resources>
@@ -65,14 +65,20 @@
 
 
         </Grid.Resources>
-        
-        <DataGrid x:Name="TemplateDataGrid"
-          AutoGenerateColumns="False"
-          Margin="10"
-          CanUserSortColumns="True"
-          FontSize="12"
-          Background="{DynamicResource BackgroundBrush}"
-          IsReadOnly="False" />
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10" HorizontalAlignment="Right">
+            <Button x:Name="UseTable" Content="Använd tabell" FontSize="16" Padding="5" Margin="0,0,10,0" Background="Green" Foreground="White" Click="UseTable_Click"/>
+            <Button x:Name="Reset" Content="Återställ tabell" FontSize="16" Padding="5" Margin="0,0,10,0" Background="#FFB21A" Foreground="White" Click="Reset_Click"/>
+            <Button x:Name="ExportExcel" Content="Exportera till Excel" FontSize="16" Padding="5" Background="#2D89EF" Foreground="White" Click="ExportExcel_Click"/>
+            <Button x:Name="Close" Content="Stäng ner" FontSize="16" Padding="5" Margin="50,0,0,0" Background="Red" Foreground="White" Click="Close_Click"/>
+        </StackPanel>
+
+        <DataGrid Grid.Row="1" x:Name="TemplateDataGrid" AutoGenerateColumns="False" Margin="10" CanUserSortColumns="True" FontSize="12" Background="{DynamicResource BackgroundBrush}" IsReadOnly="False" />
 
     </Grid>
 </Window>
